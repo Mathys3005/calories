@@ -45,15 +45,18 @@ class _CaloriesHomeState extends State<CaloriesHome> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: getColor(),
-        title: TextAvecStyle('Calories'),
+        title: Text('Calories', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            TextAvecStyle(
-              'Remplissez tout les champs pour calculer vos calories et '
-                  'obtenir votre besoin journalier',
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextAvecStyle(
+                'Remplissez tout les champs pour calculer vos calories et '
+                    'obtenir votre besoin journalier',
+              ),
             ),
             Card(
               elevation: 10.0,
