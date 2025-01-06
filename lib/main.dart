@@ -1,4 +1,7 @@
+import 'package:calories/services/adaptive_plateform.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,6 +16,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: [
+        Locale('fr', 'FR'),
+      ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -42,18 +52,16 @@ class _CaloriesHomeState extends State<CaloriesHome> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: getColor(),
-        title: Text('Calories', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-      ),
+    return AdaptivePlatform.scaffold(
+      title: 'Calcul de Calories',
+      backgroundColor: getColor(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: TextAvecStyle(
+              child: AdaptivePlatform.text(
                 'Remplissez tout les champs pour calculer vos calories et '
                     'obtenir votre besoin journalier',
               ),
@@ -71,35 +79,29 @@ class _CaloriesHomeState extends State<CaloriesHome> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          TextAvecStyle("Femme", color: Colors.pink),
-                          Switch(
+                          AdaptivePlatform.text("Femme", color: Colors.pink),
+                          AdaptivePlatform.myswitch(
                             value: genre,
                             onChanged: (bool b){
                               setState(() {
                                 genre = b;
                               });
                             },
-                            activeColor: getColor(),
-                            inactiveTrackColor: getColor(),
                           ),
-                          TextAvecStyle("Homme", color: Colors.blue),
+                          AdaptivePlatform.text("Homme", color: Colors.blue),
                         ],
                       ),
-                      ElevatedButton(
+                      AdaptivePlatform.button(
                           onPressed: _selectionDate,
-                          child: TextAvecStyle((age == null)?
+                          child: AdaptivePlatform.text((age == null)?
                           'Appuyez pour entrer age': 'Votre age est de $age ans'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: getColor(),
-                          ),
+                           backgroundColor: getColor(),
                       ),
-                      TextAvecStyle(color: getColor(),'Taille : ${sliderValue.toInt()} cm'),
-                      Slider(
+                      AdaptivePlatform.text(color: getColor(),'Taille : ${sliderValue.toInt()} cm'),
+                      AdaptivePlatform.slider(
                           value: sliderValue,
                           min: 100,
                           max: 230,
-                          divisions: 130,
-                          inactiveColor: Colors.grey,
                           activeColor: getColor(),
                           onChanged: (double value) {
                             setState(() {
@@ -107,19 +109,15 @@ class _CaloriesHomeState extends State<CaloriesHome> {
                             });
                           }
                       ),
-                      TextField(
+                      AdaptivePlatform.textField(
                         keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          labelText: 'Rentrez votre poids en kg',
-                          hintText: 'Poids(kg)',
-                        ),
                         onChanged: (String value) {
                           setState(() {
                             poids = value;
                           });
-                        },
+                        }, placeHolder: 'Poids(kg)',
                       ),
-                      TextAvecStyle('Quel est votre activité sportive ?', color: getColor()),
+                      AdaptivePlatform.text('Quel est votre activité sportive ?', color: getColor()),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -134,7 +132,7 @@ class _CaloriesHomeState extends State<CaloriesHome> {
                                   });
                                 }
                             ),
-                            TextAvecStyle('Faible', color: getColor()),
+                              AdaptivePlatform.text('Faible', color: getColor()),
                             ],
                           ),
                           Column(
@@ -148,7 +146,7 @@ class _CaloriesHomeState extends State<CaloriesHome> {
                                     });
                                   }
                               ),
-                              TextAvecStyle('Modérée', color: getColor()),
+                              AdaptivePlatform.text('Modérée', color: getColor()),
                             ]
                           ),
                           Column(
@@ -162,7 +160,7 @@ class _CaloriesHomeState extends State<CaloriesHome> {
                                     });
                                   }
                               ),
-                              TextAvecStyle('Forte', color: getColor()),
+                              AdaptivePlatform.text('Forte', color: getColor()),
                             ]
                           ),
                         ],
@@ -173,7 +171,7 @@ class _CaloriesHomeState extends State<CaloriesHome> {
             ),
             ElevatedButton(
                 onPressed: calculerNombreDeCalories,
-                child: TextAvecStyle('Calculer', color: Colors.white),
+                child: AdaptivePlatform.text('Calculer', color: Colors.white),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: getColor(),
                 ),
@@ -293,25 +291,10 @@ class _CaloriesHomeState extends State<CaloriesHome> {
   }
 
   void _alerteErreur(String erreur) {
-    showDialog(
+    AdaptivePlatform.dialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: TextAvecStyle('Erreur', color: Colors.red),
-          content: TextAvecStyle(erreur),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: TextAvecStyle('OK', color: Colors.white),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-              ),
-            ),
-          ],
-        );
-      },
+      title: "Erreur",
+      messages: [erreur],
     );
   }
 
